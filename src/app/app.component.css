@@ -162,9 +162,11 @@ cursor: pointer;
 }
 
 #drawflow {
-  position: relative;
-  width: calc(100vw - 301px);
-  height: calc(100vh - 50px);
+  padding-left: 200px;
+  display: flex;
+  /* position: relative; */
+  width: 70%;
+  height: 100vh;
   top: 40px;
   background: var(--background-color);
   background-size: 25px 25px;
@@ -365,4 +367,44 @@ cursor: pointer;
  
 body{
   overflow: auto;
+}
+.container {
+  display: flex;
+  padding: 10px;
+}
+
+.sidebar {
+  width: 300px;
+  padding: 20px;
+  padding-right: 50px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+}
+
+#draggable-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.draggable-item {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #ddd;
+  cursor: grab;
+}
+
+.draggable-item input {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.draggable-item button {
+  margin-left: 5px;
+}
+
+.draggable-item:active {
+  cursor: grabbing;
 }

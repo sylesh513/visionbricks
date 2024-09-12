@@ -1,1 +1,17 @@
-<div id="drawflow" #drawflow></div>
+<input type="text" id="nodeNameInput" placeholder="Enter node name" />
+<button (click)="createNode()">Create Node</button>
+<div class="container">
+    <div class="sidebar">
+      <h3>Draggable List</h3>
+      <ul id="draggable-list">
+        <li *ngFor="let item of items; let i = index" class="draggable-item" draggable="true" [attr.data-node-name]="item.name">
+          <input [(ngModel)]="item.name" />
+          <button (click)="deleteItem(i)">Delete</button>
+        </li>
+      </ul>
+      <input type="text" [(ngModel)]="newItemName" placeholder="Enter new item name" />
+      <button (click)="addItem()">Add Item</button>
+    </div>
+    <div id="drawflow" #drawflow></div>
+</div>
+
