@@ -97,8 +97,8 @@ cursor: pointer;
   right: 10px;
   color: white;
   font-weight: bold;
-  border: 1px solid #0e5ba3;
-  background: #4ea9ff;
+  border: 1px solid #cbe3fa;
+  background: #afd4f6;
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
@@ -202,18 +202,18 @@ cursor: pointer;
 
 .drawflow .drawflow-node.selected  {
   background: white;
-  border: 1px solid #4ea9ff;
-  -webkit-box-shadow: 0 2px 20px 2px #4ea9ff;
-  box-shadow: 0 2px 20px 2px #4ea9ff;
+  border: 1px solid #add7ff;
+  -webkit-box-shadow: 0 2px 20px 2px #add7ff;
+  box-shadow: 0 2px 20px 2px #add7ff;
 }
 
 .drawflow .drawflow-node.selected .title-box {
-  color: #22598c;
+  color: #9bc1e4;
   /*border-bottom: 1px solid #4ea9ff;*/
 }
 
 .drawflow .connection .main-path {
-  stroke: #4ea9ff;
+  stroke: #b7dcff;
   stroke-width: 3px;
 }
 
@@ -224,7 +224,7 @@ cursor: pointer;
 }
 
 .drawflow .drawflow-node .input:hover, .drawflow .drawflow-node .output:hover {
-  background: #4ea9ff;
+  background: #badcfc;
 }
 
 .drawflow .drawflow-node .output {
@@ -298,7 +298,7 @@ cursor: pointer;
 
 
 .drawflow-node.personalized {
-  background: red;
+  background: rgb(241, 128, 128);
   height: 200px;
   text-align: center;
   color: white;
@@ -311,7 +311,7 @@ cursor: pointer;
 }
 
 .drawflow-node.personalized.selected {
-  background: blue;
+  background: rgb(185, 185, 243);
 }
 
 .drawflow .connection .point {
@@ -322,7 +322,7 @@ cursor: pointer;
 }
 
 .drawflow .connection .point.selected, .drawflow .connection .point:hover {
-  fill: #4ea9ff;
+  fill: #a1cffa;
 }
 
 
@@ -408,3 +408,14 @@ body{
 .draggable-item:active {
   cursor: grabbing;
 }
+button {
+  padding: 5px 20px;
+  background-color: #4ea9ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: grab;
+  }
+button:active {
+    cursor: grabbing;
+  }

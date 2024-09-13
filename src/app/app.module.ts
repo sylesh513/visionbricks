@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
-
+import { DragDropModule } from '@angular/cdk/drag-drop'; // Import DragDropModule
 import { AppComponent } from './app.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    FormsModule // Include FormsModule in imports array
+    FormsModule,
+    DragDropModule, // Include DragDropModule in imports array
+    SidebarComponent // Import SidebarComponent instead of declaring it
   ],
   providers: [],
   bootstrap: [AppComponent]
