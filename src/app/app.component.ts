@@ -14,8 +14,8 @@ import interact from 'interactjs';
 export class AppComponent implements OnInit {
   drawflow: any;
   id: any = null;
-  data = { name: '' };
-  items = [{ name: 'Node 1' }, { name: 'Node 2' }, { name: 'Node 3' }];
+  data = { name: '', params: '' };
+  items = [{ name: 'Node 1', params: ''}];
   newItemName = '';
   constructor(public dialog: MatDialog) {}
 
@@ -90,21 +90,21 @@ export class AppComponent implements OnInit {
     });
   }
   openDialog(): void {
-    const dialogRef = this.dialog.open(NodeDialogComponent, {
-      width: '250px',
-      data: { name: '', mode: 'create' }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.action === 'create') {
-        this.newItemName = result.name;
-        if (typeof this.newItemName === 'string') {
-          this.items.push({ name: this.newItemName });
+  const dialogRef = this.dialog.open(NodeDialogComponent, {
+    width: '250px',
+    data: { name: '', mode: 'create', params: '' } // Initialize params
+  });
 
-        }
+  dialogRef.afterClosed().subscribe(result => {
+    if (result && result.action === 'create') {
+      this.newItemName = result.name;
+      const newItemParams = result.params;
+      if (typeof this.newItemName === 'string') {
+        this.items.push({ name: this.newItemName, params: newItemParams });
       }
-    });
-  }
+    }
+  });
+}
 
   dragMoveListener(event) {
     const target = event.target;
@@ -135,19 +135,24 @@ export class AppComponent implements OnInit {
   openEditDialog(index: number): void {
     const dialogRef = this.dialog.open(NodeDialogComponent, {
       width: '250px',
-      data: { name: this.items[index].name, index: index, mode: 'edit' }
+      data: { 
+        name: this.items[index].name, 
+        params: this.items[index].params, // Pass the params property
+        index: index, 
+        mode: 'edit' 
+      }
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (result.action === 'edit') {
-          this.items[index].name = result.name;
-        } else if (result.action === 'delete') {
-          this.deleteItem(index);
-        }
+      if (result && result.action === 'save') {
+        this.items[index].name = result.name;
+        this.items[index].params = result.params; // Update the params property
+      } else if (result && result.action === 'delete') {
+        this.deleteItem(index);
       }
     });
   }
+ 
 
   removeNodeFromDrawflow(index: number) {
     const item = document.querySelector(`.draggable-item[data-index="${index}"]`);
@@ -175,7 +180,7 @@ export class AppComponent implements OnInit {
       if (this.items.some(item => item.name === this.newItemName)) {
         alert('Item with this name already exists');
       } else {
-        this.items.push({ name: this.newItemName });
+        this.items.push({ name: this.newItemName, params: '' });
         this.newItemName = '';
       }
     } else {

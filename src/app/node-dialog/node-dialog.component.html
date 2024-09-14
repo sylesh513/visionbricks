@@ -4,7 +4,7 @@
     <mat-label>Node Name</mat-label>
     <input matInput [(ngModel)]="data.name">
   </mat-form-field>
-  <mat-form-field *ngIf="data.mode === 'edit'">
+  <mat-form-field>
     <mat-label>Parameters</mat-label>
     <textarea matInput [(ngModel)]="data.params"></textarea>
   </mat-form-field>
