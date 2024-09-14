@@ -1,14 +1,14 @@
 :root {
-  --border-color: #3f3e3e;
+  --border-color: #dfdfdf;
   --background-color: #ffffff;
   --background-box-title: rgb(171, 181, 234);
-  --primary-color: #4ea9ff;
+  --primary-color: #ffffff;
   --secondary-color: rgb(171, 181, 234);
   --highlight-color: #add7ff;
-  --text-color: #555555;
-  --button-color: #4ea9ff;
-  --button-hover-color: #3a8edb;
-  --button-active-color: #2c6bb2;
+  --text-color: #979797;
+  --button-color: #d1d1d1;
+  --button-hover-color: #c7c7c7;
+  --button-active-color: #cecfd0;
 }
 
 html, body {
@@ -161,7 +161,41 @@ header a {
   z-index: 5;
   cursor: pointer;
 }
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 16px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
 
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 16px;
+}
+
+.bar-zoom {
+  float: right;
+  position: absolute;
+  bottom: 10px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.add-button {
+  margin-top: 20px;
+  background-color: #43b993;
+}
 .bar-zoom {
   float: right;
   position: absolute;
@@ -185,7 +219,14 @@ header a {
 .bar-zoom svg:nth-child(1) {
   padding-left: 0;
 }
-
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #a1cffa;
+  color: black;
+}
 #drawflow {
   padding-left: 200px;
   display: flex;
@@ -212,27 +253,36 @@ header a {
 }
 
 .drawflow .drawflow-node {
-  background: var(--background-color);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 2px 15px 2px var(--border-color);
-  padding: 0;
-  width: 200px;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
+  height: 60px;
+  width: 120px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    background: #d2fdfd;
+    width: 160px;
+    min-height: 40px;
+    border-radius: 4px;
+    border: 1px solid #907373;
+    color: #000;
+    z-index: 2;
+    padding: 1px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
 }
 
 .drawflow .drawflow-node.selected {
-  background: rgb(171, 181, 234);
+  background: rgb(137, 148, 210);
   border: 1px solid var(--highlight-color);
   box-shadow: 0 2px 20px 2px var(--highlight-color);
 }
 
 .drawflow .drawflow-node.selected .title-box {
-  color: #9bc1e4;
+  color: #4b95da;
 }
 
 .drawflow .connection .main-path {
-  stroke: #b7dcff;
+  stroke: #4b95da;
   stroke-width: 3px;
 }
 
@@ -398,14 +448,15 @@ body {
 
 .sidebar {
   width: 300px;
+  margin-right: 10px;
   padding: 20px;
-  padding-right: 50px;
   background-color: var(--secondary-color);
   border-right: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.5s ease;
-}
+  align-items: center;
+} 
 
 #draggable-list {
   list-style-type: none;
@@ -413,15 +464,16 @@ body {
 }
 
 .draggable-item {
-  width: 300px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 300px;
   padding: 10px;
   margin: 5px 0;
   background-color: #ddd;
   cursor: grab;
   border-radius: 10px;
-  transition: transform 0.2s ease, background-color 0.3s ease;
+  transition: transform 0.1s ease, background-color 0.2s ease;
 }
 
 .draggable-item:hover {
@@ -444,7 +496,7 @@ body {
 .draggable-item button {
   margin-left: 5px;
   padding: 5px 10px;
-  background-color: var(--button-color);
+  background-color: rgb(255, 169, 169)smoke;
   color: rgb(171, 181, 234);
   border: none;
   border-radius: 5px;
@@ -495,4 +547,10 @@ button:active {
   to {
     transform: translateX(0);
   }
+}
+.export-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin-bottom: 20px;
 }

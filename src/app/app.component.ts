@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { NodeDialogComponent } from './node-dialog/node-dialog.component';
 import Drawflow from 'drawflow';
 import interact from 'interactjs';
 
@@ -6,13 +8,16 @@ import interact from 'interactjs';
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None// Disable encapsulation
+
 })
 export class AppComponent implements OnInit {
   drawflow: any;
   id: any = null;
   data = { name: '' };
-  items = [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }];
+  items = [{ name: 'Node 1' }, { name: 'Node 2' }, { name: 'Node 3' }];
   newItemName = '';
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
     this.id = document.getElementById('drawflow');
@@ -52,8 +57,8 @@ export class AppComponent implements OnInit {
       ondrop: (event) => {
         const nodeName = event.relatedTarget.getAttribute('data-node-name');
         const index = event.relatedTarget.getAttribute('data-index');
-        const x = event.dragEvent.clientX - event.target.getBoundingClientRect().left;
-        const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top;
+        const x = event.dragEvent.clientX - event.target.getBoundingClientRect().left - 300;
+        const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top -40;
         this.addNode(nodeName, x, y);
         // Check for cycles after adding the node
         // if (this.hasCycle()) {
@@ -84,6 +89,22 @@ export class AppComponent implements OnInit {
       }
     });
   }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NodeDialogComponent, {
+      width: '250px',
+      data: { name: '', mode: 'create' }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.action === 'create') {
+        this.newItemName = result.name;
+        if (typeof this.newItemName === 'string') {
+          this.items.push({ name: this.newItemName });
+
+        }
+      }
+    });
+  }
 
   dragMoveListener(event) {
     const target = event.target;
@@ -110,6 +131,22 @@ export class AppComponent implements OnInit {
       'test',
       true
     );
+  }
+  openEditDialog(index: number): void {
+    const dialogRef = this.dialog.open(NodeDialogComponent, {
+      width: '250px',
+      data: { name: this.items[index].name, index: index, mode: 'edit' }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.action === 'edit') {
+          this.items[index].name = result.name;
+        } else if (result.action === 'delete') {
+          this.deleteItem(index);
+        }
+      }
+    });
   }
 
   removeNodeFromDrawflow(index: number) {
@@ -148,6 +185,7 @@ export class AppComponent implements OnInit {
 
   deleteItem(index: number) {
     this.items.splice(index, 1);
+    console.log(this.items);
   }
 
   exportWorkflow() {

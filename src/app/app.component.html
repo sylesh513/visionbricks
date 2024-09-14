@@ -1,22 +1,16 @@
-<button (click)="exportWorkflow()" class="export-button">Export Workflow</button>
-<style>
-  .export-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-</style>
+<button (click)="exportWorkflow()" class="floating-button">Export Workflow</button>
 <div class="container">
   <div class="sidebar"> 
-    <h3>Nodes List</h3>
+    <h1 style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-weight: 700;">Nodes List</h1>
     <ul id="draggable-list">
       <li *ngFor="let item of items; let i = index" class="draggable-item" draggable="true" [attr.data-node-name]="item.name" [attr.data-index]="i">
-        <input [(ngModel)]="item.name" />
-        <button (click)="deleteItem(i)">Delete</button>
+        {{ item.name }}
+        <button class="edit-button" (click)="openEditDialog(i)" style="color: rgb(104, 197, 197); background-color: rgb(67, 67, 67);">
+           Edit
+        </button>
       </li>
     </ul>
-    <input type="text" [(ngModel)]="newItemName" placeholder="Enter new item name" />
-    <button (click)="addItem()">Add Item</button>
+    <button mat-button (click)="openDialog()" class="add-button" style="color: rgb(104, 197, 197); background-color: rgb(67, 67, 67);">Add Node</button>
   </div>
   <div id="drawflow" #drawflow></div>
 </div>

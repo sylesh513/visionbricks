@@ -1,0 +1,17 @@
+/* Ensure the modal dialog has a maximum width and proper padding */
+.mat-dialog-container {
+    max-width: 90vw; /* Adjust as needed */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent horizontal scrollbar */
+}
+
+/* Ensure the content inside the modal dialog fits within the dialog */
+.mat-form-field {
+    width: 100%;
+}
+
+.mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
