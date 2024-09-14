@@ -1,17 +1,52 @@
 /* Ensure the modal dialog has a maximum width and proper padding */
+/* styles.css */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 .mat-dialog-container {
-    max-width: 90vw; /* Adjust as needed */
-    padding: 20px;
+    align-items: center;
+    width: 100%; 
+    max-width: 400px; /* Adjust as needed */
+    padding: 16px;
     box-sizing: border-box;
-    overflow: hidden; /* Prevent horizontal scrollbar */
 }
 
-/* Ensure the content inside the modal dialog fits within the dialog */
-.mat-form-field {
-    width: 100%;
-}
-
-.mat-dialog-actions {
+.input {
     display: flex;
-    justify-content: flex-end;
+    border-color: #303f9f;
+    border-radius: 5px;
+    border-width: 2px;
 }
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #3f51b5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #303f9f;
+  }
+  
+  .custom-file-upload input[type="file"] {
+    display: none;
+  }
+  textarea{
+    min-height: 90px;
+    width: 300px;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  
+  .mat-dialog-content {
+    overflow-x: hidden;
+  }
