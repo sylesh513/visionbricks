@@ -3,9 +3,6 @@ import requests
 import time
 
 # Databricks API credentials
-DATABRICKS_HOST = 'https://adb-2391317195324727.7.azuredatabricks.net'  # Replace with your Databricks host
-DATABRICKS_TOKEN = 'dapi2ba83a009e697fc9940656df705a7098-3'  # Replace with your Databricks token
-CLUSTER_ID = '0913-052228-mn4cbjcl'  # Replace with your cluster ID
 with open('/home/vesh/uploads/workflow_with_files.json') as f:
     data = json.load(f)
 
