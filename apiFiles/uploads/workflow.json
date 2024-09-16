@@ -1,0 +1,18 @@
+{
+  "nodes": [
+    {
+      "id": 2,
+      "name": "node 1",
+      "connections": [
+        "node 2"
+      ],
+      "file": {}
+    },
+    {
+      "id": 3,
+      "name": "node 2",
+      "connections": [],
+      "file": {}
+    }
+  ]
+}

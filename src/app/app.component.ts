@@ -8,15 +8,15 @@ import interact from 'interactjs';
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None// Disable encapsulation
-
+  encapsulation: ViewEncapsulation.None // Disable encapsulation
 })
 export class AppComponent implements OnInit {
   drawflow: any;
   id: any = null;
   data = { name: '', params: '' };
-  items = [{ name: 'Node 1', params: ''}];
+  items = [{ name: 'Node 1', params: '', file: null }];
   newItemName = '';
+
   constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
         const nodeName = event.relatedTarget.getAttribute('data-node-name');
         const index = event.relatedTarget.getAttribute('data-index');
         const x = event.dragEvent.clientX - event.target.getBoundingClientRect().left - 300;
-        const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top -40;
+        const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top - 40;
         this.addNode(nodeName, x, y);
         // Check for cycles after adding the node
         // if (this.hasCycle()) {
@@ -75,6 +75,7 @@ export class AppComponent implements OnInit {
         event.relatedTarget.removeAttribute('data-y');
       }
     });
+
     this.drawflow.on('connectionCreated', (event) => {
       console.log('Connection Created:', event);
       const outputNode = this.drawflow.getNodeFromId(event.output_id);
@@ -88,6 +89,7 @@ export class AppComponent implements OnInit {
         this.drawflow.removeSingleConnection(event.output_id, event.input_id, event.output_class, event.input_class);
       }
     });
+
     this.id.addEventListener('dblclick', (event) => {
       const target = event.target as HTMLElement;
       const nodeElement = target.closest('.drawflow-node');
@@ -102,78 +104,67 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  
-  
+
   openDialog(): void {
-  const dialogRef = this.dialog.open(NodeDialogComponent, {
-    width: '300px',
-    data: { name: '', mode: 'create', params: '' } // Initialize params
-  });
+    const dialogRef = this.dialog.open(NodeDialogComponent, {
+      width: '300px',
+      data: { name: '', mode: 'create', params: '' } // Initialize params
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result && result.action === 'create') {
-      this.newItemName = result.name;
-      const newItemParams = result.params;
-      if (typeof this.newItemName === 'string') {
-        this.items.push({ name: this.newItemName, params: newItemParams });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.action === 'create') {
+        this.newItemName = result.name;
+        const newItemParams = result.params;
+        if (typeof this.newItemName === 'string') {
+          this.items.push({ name: this.newItemName, params: newItemParams, file: null });
+        }
       }
-    }
-  });
-  this.drawflow.on('contextmenu', (event) => {
-    event.preventDefault();
-    console.log('Right-click on node:', event);
-    const nodeId = event.target.closest('.drawflow-node').id.replace('node-', '');
-    const node = this.drawflow.getNodeFromId(nodeId);
-    const index = this.items.findIndex(item => item.name === node.name);
-    console.log('Node Index:', index);
-    if (index !== -1) {
-      this.openContextMenu(event, index);
-    }
-  });
-}
-openContextMenu(event: MouseEvent, index: number): void {
-  // Create a context menu
-  const contextMenu = document.createElement('div');
-  contextMenu.classList.add('context-menu');
-  contextMenu.style.top = `${event.clientY}px`;
-  contextMenu.style.left = `${event.clientX}px`;
-
-  // Add menu items
-  const editItem = document.createElement('div');
-  editItem.classList.add('context-menu-item');
-  editItem.innerText = 'Edit';
-  editItem.addEventListener('click', () => {
-    this.openEditDialog(index);
-    document.body.removeChild(contextMenu);
-  });
-
-  const deleteItem = document.createElement('div');
-  deleteItem.classList.add('context-menu-item');
-  deleteItem.innerText = 'Delete';
-  deleteItem.addEventListener('click', () => {
-    this.deleteItem(index);
-    document.body.removeChild(contextMenu);
-  });
-
-  contextMenu.appendChild(editItem);
-  contextMenu.appendChild(deleteItem);
-
-  // Remove any existing context menu
-  const existingMenu = document.querySelector('.context-menu');
-  if (existingMenu) {
-    document.body.removeChild(existingMenu);
+    });
   }
 
-  // Add the context menu to the body
-  document.body.appendChild(contextMenu);
+  openContextMenu(event: MouseEvent, index: number): void {
+    // Create a context menu
+    const contextMenu = document.createElement('div');
+    contextMenu.classList.add('context-menu');
+    contextMenu.style.top = `${event.clientY}px`;
+    contextMenu.style.left = `${event.clientX}px`;
 
-  // Remove the context menu when clicking outside
-  document.addEventListener('click', () => {
-    if (contextMenu) {
+    // Add menu items
+    const editItem = document.createElement('div');
+    editItem.classList.add('context-menu-item');
+    editItem.innerText = 'Edit';
+    editItem.addEventListener('click', () => {
+      this.openEditDialog(index);
       document.body.removeChild(contextMenu);
+    });
+
+    const deleteItem = document.createElement('div');
+    deleteItem.classList.add('context-menu-item');
+    deleteItem.innerText = 'Delete';
+    deleteItem.addEventListener('click', () => {
+      this.deleteItem(index);
+      document.body.removeChild(contextMenu);
+    });
+
+    contextMenu.appendChild(editItem);
+    contextMenu.appendChild(deleteItem);
+
+    // Remove any existing context menu
+    const existingMenu = document.querySelector('.context-menu');
+    if (existingMenu) {
+      document.body.removeChild(existingMenu);
     }
-  }, { once: true });
-}
+
+    // Add the context menu to the body
+    document.body.appendChild(contextMenu);
+
+    // Remove the context menu when clicking outside
+    document.addEventListener('click', () => {
+      if (contextMenu) {
+        document.body.removeChild(contextMenu);
+      }
+    }, { once: true });
+  }
 
   dragMoveListener(event) {
     const target = event.target;
@@ -201,11 +192,11 @@ openContextMenu(event: MouseEvent, index: number): void {
       true
     );
   }
+
   openEditDialog(index: number): void {
     const dialogRef = this.dialog.open(NodeDialogComponent, {
       width: '300px', // Set the desired width for the dialog
-      maxWidth: '100%',
-       // Ensure the dialog does not exceed the screen width
+      maxWidth: '100%', // Ensure the dialog does not exceed the screen width
       data: { 
         name: this.items[index].name, 
         params: this.items[index].params, 
@@ -213,32 +204,35 @@ openContextMenu(event: MouseEvent, index: number): void {
         mode: 'edit' 
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.action === 'save') {
         this.items[index].name = result.name;
         this.items[index].params = result.params;
         if (result.file) {
-          this.uploadFile(result.file);
+          this.uploadFile(result.file, index);
         }
       } else if (result && result.action === 'delete') {
         this.deleteItem(index);
       }
     });
-  }  
-  uploadFile(file: File): void {
+  }
+
+  uploadFile(file: File, index: number): void {
     // Implement the file upload logic here
     const formData = new FormData();
     formData.append('file', file);
-  
+
+    // Store the file in the items array
+    this.items[index].file = file;
+    console.log(this.items);
+
     // Use your preferred method to upload the file to the API
     // Example using HttpClient:
     // this.http.post('your-api-endpoint', formData).subscribe(response => {
     //   console.log('File uploaded successfully', response);
     // });
   }
-  
- 
 
   removeNodeFromDrawflow(index: number) {
     const item = document.querySelector(`.draggable-item[data-index="${index}"]`);
@@ -249,9 +243,47 @@ openContextMenu(event: MouseEvent, index: number): void {
       }, 0);
     }
   }
+
   runWorkflow(): void {
     console.log('Run workflow');
-    // Add your logic to run the workflow here
+    const workflowData = this.drawflow.export();
+    const processedData = this.processWorkflowData(workflowData);
+
+    // Send the processed data to the server
+    this.sendWorkflowData(processedData);
+  }
+
+  sendWorkflowData(workflowData: any): void {
+    const formData = new FormData();
+    formData.append('workflowData', JSON.stringify(workflowData, null, 2));
+
+    // Append files to the formData
+    workflowData.nodes.forEach((node, index) => {
+      if (node.file) {
+        formData.append(`file_${index}`, node.file);
+      }
+    });
+
+    const url = 'http://127.0.0.1:5000/upload_workflow'; // Replace with your API endpoint
+    fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => {response.json();
+        if(response.status === 200){
+          alert('Success');
+        }
+        if(response.status !== 200){
+          alert(`Error: ${response.statusText}`);
+        }
+      })
+      .then(data => {
+        console.log('Workflow data uploaded successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error uploading workflow data:', error);
+      });
+    console.log('Sending workflow data to server:', workflowData);
   }
 
   createNode() {
@@ -270,7 +302,7 @@ openContextMenu(event: MouseEvent, index: number): void {
       if (this.items.some(item => item.name === this.newItemName)) {
         alert('Item with this name already exists');
       } else {
-        this.items.push({ name: this.newItemName, params: '' });
+        this.items.push({ name: this.newItemName, params: '', file: null });
         this.newItemName = '';
       }
     } else {
@@ -288,16 +320,17 @@ openContextMenu(event: MouseEvent, index: number): void {
     console.log('Exported Workflow Data:', workflowData);
     const processedData = this.processWorkflowData(workflowData);
     this.downloadWorkflow(processedData);
- 
+
     // You can now process or store the workflowData as needed
   }
+
   processWorkflowData(workflowData: any): any {
     const processedData = { nodes: [] };
     for (const key in workflowData.drawflow.Home.data) {
       const node = workflowData.drawflow.Home.data[key];
       const itemName = this.items.find(item => item.name === node.name)?.name || node.name;
       const connections = [];
-  
+
       // Collect names of connected nodes
       for (const outputKey in node.outputs) {
         const outputConnections = node.outputs[outputKey].connections;
@@ -307,11 +340,12 @@ openContextMenu(event: MouseEvent, index: number): void {
           connections.push(connectedNodeName);
         }
       }
-  
+
       processedData.nodes.push({
         id: node.id,
         name: itemName,
-        connections: connections
+        connections: connections,
+        file: this.items.find(item => item.name === node.name)?.file || null // Include the file associated with the node
       });
     }
     return processedData;
@@ -329,7 +363,6 @@ openContextMenu(event: MouseEvent, index: number): void {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
- 
 
   hasCycle(): boolean {
     const workflowData = this.drawflow.export();
