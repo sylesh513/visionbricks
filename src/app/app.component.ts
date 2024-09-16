@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NodeDialogComponent } from './node-dialog/node-dialog.component';
 import Drawflow from 'drawflow';
@@ -13,7 +13,6 @@ import interact from 'interactjs';
 export class AppComponent implements OnInit {
   drawflow: any;
   id: any = null;
-  data = { name: '', params: '' };
   items = [{ name: 'Node 1', params: '', file: null }];
   newItemName = '';
 
@@ -23,6 +22,12 @@ export class AppComponent implements OnInit {
     this.id = document.getElementById('drawflow');
     this.drawflow = new Drawflow(this.id);
     this.drawflow.start();
+
+    // Load workflow data from localStorage
+    const savedWorkflow = localStorage.getItem('workflowData');
+    if (savedWorkflow) {
+      this.importWorkflow(savedWorkflow);
+    }
 
     // Initialize draggable items
     interact('.draggable-item').draggable({
@@ -105,6 +110,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    // Save workflow data to localStorage before the user closes the tab or reloads the page
+    const workflowData = this.drawflow.export();
+    const processedData = this.processWorkflowData(workflowData);
+    localStorage.setItem('workflowData', JSON.stringify(processedData));
+  }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(NodeDialogComponent, {
       width: '300px',
@@ -115,8 +128,9 @@ export class AppComponent implements OnInit {
       if (result && result.action === 'create') {
         this.newItemName = result.name;
         const newItemParams = result.params;
+
         if (typeof this.newItemName === 'string') {
-          this.items.push({ name: this.newItemName, params: newItemParams, file: null });
+          this.items.push({ name: this.newItemName, params: newItemParams, file: result.file });
         }
       }
     });
@@ -176,18 +190,18 @@ export class AppComponent implements OnInit {
     target.setAttribute('data-y', y);
   }
 
-  addNode(nodeName: string, x: number, y: number) {
+  addNode(nodeName: string, x: number, y: number): number {
     var html = document.createElement('div');
     html.innerHTML = nodeName;
     this.drawflow.registerNode('test', html);
-    this.drawflow.addNode(
+    return this.drawflow.addNode(
       nodeName,
       1,
       1,
       x,
       y,
       'github',
-      this.data,
+      this.items,
       'test',
       true
     );
@@ -200,6 +214,7 @@ export class AppComponent implements OnInit {
       data: { 
         name: this.items[index].name, 
         params: this.items[index].params, 
+        file: this.items[index].file, // Include the file in the dialog data
         index: index, 
         mode: 'edit' 
       }
@@ -210,7 +225,7 @@ export class AppComponent implements OnInit {
         this.items[index].name = result.name;
         this.items[index].params = result.params;
         if (result.file) {
-          this.uploadFile(result.file, index);
+          this.items[index].file = result.file; // Save the file with the node
         }
       } else if (result && result.action === 'delete') {
         this.deleteItem(index);
@@ -260,7 +275,7 @@ export class AppComponent implements OnInit {
     // Append files to the formData
     workflowData.nodes.forEach((node, index) => {
       if (node.file) {
-        formData.append(`file_${index}`, node.file);
+        formData.append(node.name, node.file);
       }
     });
 
@@ -315,20 +330,86 @@ export class AppComponent implements OnInit {
     console.log(this.items);
   }
 
+  importWorkflow(jsonData: string) {
+    this.items.length = 0; // Clear the items array
+    try {
+      const workflowData = JSON.parse(jsonData);
+  
+      if (!this.drawflow) {
+        this.id = document.getElementById('drawflow');
+        this.drawflow = new Drawflow(this.id);
+        this.drawflow.start();
+      } else {
+        this.drawflow.clear(); // Clear the current Drawflow data
+      }
+  
+      const nodeIdMap = new Map<string, number>();
+      const nodeNamesSet = new Set<string>(); // Set to track node names
+  
+      // First, add all nodes to the Drawflow
+      workflowData.nodes.forEach(node => {
+        const nodeId = this.addNode(node.name, node.position.x, node.position.y); // Use positions
+        nodeIdMap.set(node.name, nodeId);
+        const drawflowNode = this.drawflow.getNodeFromId(nodeId);
+        drawflowNode.data = { params: node.params, file: node.file };
+
+        // Check for duplicate node names
+        if (!nodeNamesSet.has(node.name)) {
+          nodeNamesSet.add(node.name);
+  
+          // Add to sidebar
+          this.items.push({ name: node.name, params: node.params, file: node.file });
+  
+          // Add to Drawflow
+        } else {
+          console.warn(`Duplicate node name found: ${node.name}. Skipping this node.`);
+        }
+      });
+  
+      // Then, recreate connections
+      workflowData.nodes.forEach(node => {
+        node.connections.forEach(connection => {
+          const outputNodeId = nodeIdMap.get(node.name);
+          const inputNodeId = nodeIdMap.get(connection);
+          if (outputNodeId && inputNodeId) {
+            this.drawflow.addConnection(outputNodeId, inputNodeId, 'output_1', 'input_1');
+          }
+        });
+      });
+  
+      console.log('Workflow imported successfully:', workflowData);
+    } catch (error) {
+      console.error('Error importing workflow data:', error);
+    }
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const jsonData = e.target.result;
+        this.importWorkflow(jsonData);
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  clearWorkflow() {
+    this.drawflow.clear();
+  }
+
   exportWorkflow() {
     const workflowData = this.drawflow.export();
-    console.log('Exported Workflow Data:', workflowData);
     const processedData = this.processWorkflowData(workflowData);
+    console.log('Exported Workflow Data:', processedData);
     this.downloadWorkflow(processedData);
-
-    // You can now process or store the workflowData as needed
   }
 
   processWorkflowData(workflowData: any): any {
     const processedData = { nodes: [] };
     for (const key in workflowData.drawflow.Home.data) {
       const node = workflowData.drawflow.Home.data[key];
-      const itemName = this.items.find(item => item.name === node.name)?.name || node.name;
+      const item = this.items.find(item => item.name === node.name);
       const connections = [];
 
       // Collect names of connected nodes
@@ -336,16 +417,17 @@ export class AppComponent implements OnInit {
         const outputConnections = node.outputs[outputKey].connections;
         for (const connection of outputConnections) {
           const connectedNode = workflowData.drawflow.Home.data[connection.node];
-          const connectedNodeName = this.items.find(item => item.name === connectedNode.name)?.name || connectedNode.name;
-          connections.push(connectedNodeName);
+          connections.push(connectedNode.name);
         }
       }
 
       processedData.nodes.push({
         id: node.id,
-        name: itemName,
+        name: node.name,
+        params: item ? item.params : '',
+        file: item ? item.file : null,
         connections: connections,
-        file: this.items.find(item => item.name === node.name)?.file || null // Include the file associated with the node
+        position: { x: node.pos_x, y: node.pos_y } // Include positions
       });
     }
     return processedData;

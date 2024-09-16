@@ -1,6 +1,8 @@
 <div class="header">
   <button (click)="runWorkflow()" class="run-button">Run</button>
   <button (click)="exportWorkflow()" class="run-button">Export Workflow</button>
+  <input type="file" (change)="onFileSelected($event)" accept=".json" class="import-button">
+  <button (click)="clearWorkflow()" class="run-button">Clear</button>
 </div>
 <div class="container">
   <div class="sidebar"> 

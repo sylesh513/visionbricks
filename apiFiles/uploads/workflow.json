@@ -1,17 +1,17 @@
 {
   "nodes": [
     {
-      "id": 2,
-      "name": "node 1",
-      "connections": [
-        "node 2"
-      ],
+      "id": 1,
+      "name": "asdf",
+      "connections": [],
       "file": {}
     },
     {
-      "id": 3,
-      "name": "node 2",
-      "connections": [],
+      "id": 2,
+      "name": "eeeddd",
+      "connections": [
+        "asdf"
+      ],
       "file": {}
     }
   ]

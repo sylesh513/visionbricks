@@ -2,16 +2,18 @@
   "workflow_name": "Data Analysis Pipeline",
   "tasks": [
     {
-      "task_id": "2",
-      "task_name": "node 1",
-      "dependencies": [
-        "node 2"
-      ]
+      "task_id": "1",
+      "task_name": "asdf",
+      "dependencies": [],
+      "file": "/Users/srisylesh/Documents/visionbricks/apiFiles/uploads/html.py"
     },
     {
-      "task_id": "3",
-      "task_name": "node 2",
-      "dependencies": []
+      "task_id": "2",
+      "task_name": "eeeddd",
+      "dependencies": [
+        "asdf"
+      ],
+      "file": "/Users/srisylesh/Documents/visionbricks/apiFiles/uploads/bbcode.py"
     }
   ]
 }

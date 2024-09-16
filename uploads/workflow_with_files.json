@@ -1,0 +1,17 @@
+{
+  "workflow_name": "Data Analysis Pipeline",
+  "tasks": [
+    {
+      "task_id": "1",
+      "task_name": "Node 1",
+      "dependencies": [
+        "newone"
+      ]
+    },
+    {
+      "task_id": "2",
+      "task_name": "newone",
+      "dependencies": []
+    }
+  ]
+}

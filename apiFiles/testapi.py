@@ -6,8 +6,19 @@ import json
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/Users/srisylesh/Documents/visionbricks/apiFiles/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def clear_upload_folder(folder):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
 
 @app.route('/upload_workflow', methods=['POST'])
 def upload_workflow():
@@ -16,6 +27,11 @@ def upload_workflow():
 
     workflow_data = json.loads(request.form['workflowData'])
     files = request.files
+    print(files)
+    print(workflow_data)
+
+    # Clear the upload folder
+    clear_upload_folder(UPLOAD_FOLDER)
 
     # Save workflow data to a file
     with open(os.path.join(UPLOAD_FOLDER, 'workflow.json'), 'w') as f:
@@ -23,9 +39,9 @@ def upload_workflow():
 
     # Save each file and associate it with the corresponding node
     for node in workflow_data['nodes']:
-        file_key = f"file_{node['id']}"
-        if file_key in files:
-            file = files[file_key]
+        node_name = node['name']
+        if node_name in files:
+            file = files[node_name]
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(file_path)
             node['file'] = file_path  # Update the node's file information
@@ -41,7 +57,8 @@ def upload_workflow():
         new_task = {
             "task_id": str(node['id']),
             "task_name": node['name'],
-            "dependencies": [str(dep) for dep in node['connections']]
+            "dependencies": [str(dep) for dep in node['connections']],
+            "file": node.get('file', None)  # Include the file path if it exists
         }
         new_workflow_data["tasks"].append(new_task)
 
