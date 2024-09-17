@@ -382,6 +382,7 @@ export class AppComponent implements OnInit {
       console.error('Error importing workflow data:', error);
     }
   }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -404,6 +405,7 @@ export class AppComponent implements OnInit {
     console.log('Exported Workflow Data:', processedData);
     this.downloadWorkflow(processedData);
   }
+
   triggerFileInput() {
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
@@ -411,14 +413,13 @@ export class AppComponent implements OnInit {
     }
   }
 
-
   processWorkflowData(workflowData: any): any {
     const processedData = { nodes: [] };
     for (const key in workflowData.drawflow.Home.data) {
       const node = workflowData.drawflow.Home.data[key];
       const item = this.items.find(item => item.name === node.name);
       const connections = [];
-
+  
       // Collect names of connected nodes
       for (const outputKey in node.outputs) {
         const outputConnections = node.outputs[outputKey].connections;
@@ -427,12 +428,13 @@ export class AppComponent implements OnInit {
           connections.push(connectedNode.name);
         }
       }
-
+  
       processedData.nodes.push({
         id: node.id,
         name: node.name,
         params: item ? item.params : '',
         file: item ? item.file : null,
+        filePath: item && item.file ? item.file.path : null, // Include full file path
         connections: connections,
         position: { x: node.pos_x, y: node.pos_y } // Include positions
       });
@@ -503,4 +505,4 @@ export class AppComponent implements OnInit {
     }
     return false;
   }
-}
+} 

@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import json
+import shutil
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-UPLOAD_FOLDER = '/Users/srisylesh/Documents/visionbricks/apiFiles/uploads'
+UPLOAD_FOLDER = '/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def clear_upload_folder(folder):
@@ -40,7 +41,7 @@ def upload_workflow():
     # Save each file and associate it with the corresponding node
     for node in workflow_data['nodes']:
         node_name = node['name']
-        if node_name in files:
+        if (node_name in files):
             file = files[node_name]
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(file_path)
@@ -61,6 +62,13 @@ def upload_workflow():
             "file": node.get('file', None)  # Include the file path if it exists
         }
         new_workflow_data["tasks"].append(new_task)
+
+    # Create a mapping of task names to task IDs
+    name_to_id = {task['task_name']: task['task_id'] for task in new_workflow_data['tasks']}
+
+    # Update the dependencies
+    for task in new_workflow_data['tasks']:
+        task['dependencies'] = [name_to_id[dep] for dep in task['dependencies'] if dep in name_to_id]
 
     # Save the transformed workflow data
     with open(os.path.join(UPLOAD_FOLDER, 'workflow_with_files.json'), 'w') as f:
