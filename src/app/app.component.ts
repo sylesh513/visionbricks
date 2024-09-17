@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
       overlap: 0.75,
       ondrop: (event) => {
         const nodeName = event.relatedTarget.getAttribute('data-node-name');
-        const index = event.relatedTarget.getAttribute('data-index');
+        // const index = event.relatedTarget.getAttribute('data-index');
         const x = event.dragEvent.clientX - event.target.getBoundingClientRect().left - 300;
         const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top - 40;
         this.addNode(nodeName, x, y);
@@ -260,14 +260,21 @@ export class AppComponent implements OnInit {
   }
 
   runWorkflow(): void {
+    // Check if each node has a file
+    for (const item of this.items) {
+      if (!item.file) {
+        alert(`Error: Node "${item.name}" does not have an associated file.`);
+        return; // Stop the workflow from running
+      }
+    }
+  
     console.log('Run workflow');
     const workflowData = this.drawflow.export();
     const processedData = this.processWorkflowData(workflowData);
-
+  
     // Send the processed data to the server
     this.sendWorkflowData(processedData);
   }
-
   sendWorkflowData(workflowData: any): void {
     const formData = new FormData();
     formData.append('workflowData', JSON.stringify(workflowData, null, 2));
@@ -397,6 +404,7 @@ export class AppComponent implements OnInit {
 
   clearWorkflow() {
     this.drawflow.clear();
+    window.location.reload();
   }
 
   exportWorkflow() {

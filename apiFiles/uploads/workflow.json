@@ -1,41 +1,63 @@
 {
   "nodes": [
     {
-      "id": 3,
-      "name": "newnode",
-      "params": "n1",
-      "file": {},
-      "connections": [
-        "noaold"
-      ],
-      "position": {
-        "x": -132,
-        "y": 142
-      }
-    },
-    {
       "id": 4,
-      "name": "noaold",
-      "params": "n2",
+      "name": "new",
+      "params": "hello",
       "file": {},
-      "connections": [
-        "asdfasdf"
-      ],
-      "position": {
-        "x": 185,
-        "y": 252
-      }
-    },
-    {
-      "id": 6,
-      "name": "asdfasdf",
-      "params": "newparamass",
-      "file": null,
-      "filePath": null,
       "connections": [],
       "position": {
-        "x": 465,
-        "y": 151
+        "x": 26,
+        "y": 78
+      }
+    },
+    {
+      "id": 10,
+      "name": "new 1",
+      "params": "hi",
+      "file": {},
+      "connections": [],
+      "position": {
+        "x": 17,
+        "y": 169
+      }
+    },
+    {
+      "id": 11,
+      "name": "11",
+      "params": "",
+      "file": {},
+      "connections": [],
+      "position": {
+        "x": 20,
+        "y": 251
+      }
+    },
+    {
+      "id": 12,
+      "name": "12",
+      "params": "",
+      "file": {},
+      "connections": [],
+      "position": {
+        "x": 29,
+        "y": 352
+      }
+    },
+    {
+      "id": 14,
+      "name": "13",
+      "params": "",
+      "file": {},
+      "connections": [
+        "new",
+        "new 1",
+        "11",
+        "12"
+      ],
+      "position": {
+        "x": -290,
+        "y": 187
       }
     }
   ]

@@ -2,26 +2,42 @@
   "workflow_name": "Data Analysis Pipeline",
   "tasks": [
     {
-      "task_id": "3",
-      "task_name": "newnode",
-      "dependencies": [
-        "4"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py"
-    },
-    {
       "task_id": "4",
-      "task_name": "noaold",
+      "task_name": "new",
       "dependencies": [
-        "6"
+        "14"
       ],
-      "file": {}
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
     },
     {
-      "task_id": "6",
-      "task_name": "asdfasdf",
+      "task_id": "10",
+      "task_name": "new 1",
+      "dependencies": [
+        "14"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
+    },
+    {
+      "task_id": "11",
+      "task_name": "11",
+      "dependencies": [
+        "14"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
+    },
+    {
+      "task_id": "12",
+      "task_name": "12",
+      "dependencies": [
+        "14"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
+    },
+    {
+      "task_id": "14",
+      "task_name": "13",
       "dependencies": [],
-      "file": null
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
     }
   ]
 }
