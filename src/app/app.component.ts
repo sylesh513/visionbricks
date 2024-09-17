@@ -404,6 +404,13 @@ export class AppComponent implements OnInit {
     console.log('Exported Workflow Data:', processedData);
     this.downloadWorkflow(processedData);
   }
+  triggerFileInput() {
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
 
   processWorkflowData(workflowData: any): any {
     const processedData = { nodes: [] };

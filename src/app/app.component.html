@@ -1,7 +1,8 @@
 <div class="header">
   <button (click)="runWorkflow()" class="run-button">Run</button>
   <button (click)="exportWorkflow()" class="run-button">Export Workflow</button>
-  <input type="file" (change)="onFileSelected($event)" accept=".json" class="import-button">
+  <button (click)="triggerFileInput()" class="run-button">Import Workflow</button>
+  <input type="file" (change)="onFileSelected($event)" accept=".json" class="import-button" style="display: none;" #fileInput>
   <button (click)="clearWorkflow()" class="run-button">Clear</button>
 </div>
 <div class="container">
@@ -19,5 +20,3 @@
   </div>
   <div id="drawflow" #drawflow></div>
 </div>
-<!-- <div class="output-box" contenteditable="true">
-</div> -->
