@@ -1,18 +1,42 @@
 {
   "nodes": [
     {
-      "id": 1,
-      "name": "asdf",
-      "connections": [],
-      "file": {}
+      "id": 3,
+      "name": "newnode",
+      "params": "n1",
+      "file": {},
+      "connections": [
+        "noaold"
+      ],
+      "position": {
+        "x": -132,
+        "y": 142
+      }
     },
     {
-      "id": 2,
-      "name": "eeeddd",
+      "id": 4,
+      "name": "noaold",
+      "params": "n2",
+      "file": {},
       "connections": [
-        "asdf"
+        "asdfasdf"
       ],
-      "file": {}
+      "position": {
+        "x": 185,
+        "y": 252
+      }
+    },
+    {
+      "id": 6,
+      "name": "asdfasdf",
+      "params": "newparamass",
+      "file": null,
+      "filePath": null,
+      "connections": [],
+      "position": {
+        "x": 465,
+        "y": 151
+      }
     }
   ]
 }

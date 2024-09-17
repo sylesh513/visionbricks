@@ -2,18 +2,26 @@
   "workflow_name": "Data Analysis Pipeline",
   "tasks": [
     {
-      "task_id": "1",
-      "task_name": "asdf",
-      "dependencies": [],
-      "file": "/Users/srisylesh/Documents/visionbricks/apiFiles/uploads/html.py"
+      "task_id": "3",
+      "task_name": "newnode",
+      "dependencies": [
+        "4"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py"
     },
     {
-      "task_id": "2",
-      "task_name": "eeeddd",
+      "task_id": "4",
+      "task_name": "noaold",
       "dependencies": [
-        "asdf"
+        "6"
       ],
-      "file": "/Users/srisylesh/Documents/visionbricks/apiFiles/uploads/bbcode.py"
+      "file": {}
+    },
+    {
+      "task_id": "6",
+      "task_name": "asdfasdf",
+      "dependencies": [],
+      "file": null
     }
   ]
 }
