@@ -8,12 +8,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class NodeDialogComponent {
   selectedFile: File | null = null;
+  selectedFileName: string = 'none';
+  initialFileName: string = 'none'; // Add this property
 
   constructor(
     public dialogRef: MatDialogRef<NodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { name: string, mode: string, params?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { name: string, mode: string, params?: string, file?: File },
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    if (data.file) {
+      this.initialFileName = data.file.name; // Initialize the initial file name
+    }
+  }
 
   onCancel(): void {
     this.dialogRef.close();
@@ -38,9 +44,11 @@ export class NodeDialogComponent {
       const fileType = file.name.split('.').pop()?.toLowerCase();
       if (fileType === 'py' || fileType === 'ipynb') {
         this.selectedFile = file;
+        this.selectedFileName = file.name; // Update the filename
       } else {
         alert('Invalid file type. Please upload a .py or .ipynb file.');
         this.selectedFile = null;
+        this.selectedFileName = 'none'; // Reset the filename
       }
     }
   }

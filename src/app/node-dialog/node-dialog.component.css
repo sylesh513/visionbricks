@@ -8,6 +8,10 @@
     padding: 16px;
     box-sizing: border-box;
 }
+.filename{
+  padding: 5px;
+  margin-left: 5px;
+}
 
 .input {
     display: flex;
