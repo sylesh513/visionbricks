@@ -1,63 +1,40 @@
 {
   "nodes": [
     {
-      "id": 4,
-      "name": "new",
-      "params": "hello",
-      "file": {},
-      "connections": [],
-      "position": {
-        "x": 26,
-        "y": 78
-      }
-    },
-    {
-      "id": 10,
-      "name": "new 1",
-      "params": "hi",
-      "file": {},
-      "connections": [],
-      "position": {
-        "x": 17,
-        "y": 169
-      }
-    },
-    {
-      "id": 11,
-      "name": "11",
-      "params": "",
-      "file": {},
-      "connections": [],
-      "position": {
-        "x": 20,
-        "y": 251
-      }
-    },
-    {
-      "id": 12,
-      "name": "12",
-      "params": "",
-      "file": {},
-      "connections": [],
-      "position": {
-        "x": 29,
-        "y": 352
-      }
-    },
-    {
-      "id": 14,
-      "name": "13",
-      "params": "",
+      "id": 1,
+      "name": "loading data",
+      "params": "{\n\"param1\":\"new\"\n}",
       "file": {},
       "connections": [
-        "new",
-        "new 1",
-        "11",
-        "12"
+        "preprocessing"
       ],
       "position": {
-        "x": -290,
-        "y": 187
+        "x": -72,
+        "y": 120
+      }
+    },
+    {
+      "id": 2,
+      "name": "preprocessing",
+      "params": "{\n\"param 2\": \"second\"\n}",
+      "file": {},
+      "connections": [
+        "final_output"
+      ],
+      "position": {
+        "x": 194,
+        "y": 69
+      }
+    },
+    {
+      "id": 3,
+      "name": "final_output",
+      "params": "",
+      "file": {},
+      "connections": [],
+      "position": {
+        "x": 431,
+        "y": 182
       }
     }
   ]

@@ -2,42 +2,29 @@
   "workflow_name": "Data Analysis Pipeline",
   "tasks": [
     {
-      "task_id": "4",
-      "task_name": "new",
-      "dependencies": [
-        "14"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
-    },
-    {
-      "task_id": "10",
-      "task_name": "new 1",
-      "dependencies": [
-        "14"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
-    },
-    {
-      "task_id": "11",
-      "task_name": "11",
-      "dependencies": [
-        "14"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
-    },
-    {
-      "task_id": "12",
-      "task_name": "12",
-      "dependencies": [
-        "14"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
-    },
-    {
-      "task_id": "14",
-      "task_name": "13",
+      "task_id": "1",
+      "task_name": "loading data",
       "dependencies": [],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py"
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
+      "base_parameters": "{\n\"param1\":\"new\"\n}"
+    },
+    {
+      "task_id": "2",
+      "task_name": "preprocessing",
+      "dependencies": [
+        "1"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
+      "base_parameters": "{\n\"param 2\": \"second\"\n}"
+    },
+    {
+      "task_id": "3",
+      "task_name": "final_output",
+      "dependencies": [
+        "2"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
+      "base_parameters": ""
     }
   ]
 }
