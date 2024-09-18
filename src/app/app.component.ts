@@ -61,14 +61,9 @@ export class AppComponent implements OnInit {
       overlap: 0.75,
       ondrop: (event) => {
         const nodeName = event.relatedTarget.getAttribute('data-node-name');
-        // const index = event.relatedTarget.getAttribute('data-index');
         const x = event.dragEvent.clientX - event.target.getBoundingClientRect().left - 300;
         const y = event.dragEvent.clientY - event.target.getBoundingClientRect().top - 40;
         this.addNode(nodeName, x, y);
-        // Check for cycles after adding the node
-        // if (this.hasCycle()) {
-        //   alert('Error: Cycle detected in the workflow!');
-        // }
       },
       ondropdeactivate: (event) => {
         const startX = event.relatedTarget.getAttribute('data-start-x');
@@ -262,7 +257,7 @@ export class AppComponent implements OnInit {
   runWorkflow(): void {
     // Check if each node has a file
     for (const item of this.items) {
-      if (!item.file) {
+      if (!item.file && item.file === 'none' && item.file === '') {
         alert(`Error: Node "${item.name}" does not have an associated file.`);
         return; // Stop the workflow from running
       }
@@ -273,8 +268,9 @@ export class AppComponent implements OnInit {
     const processedData = this.processWorkflowData(workflowData);
   
     // Send the processed data to the server
-    this.sendWorkflowData(processedData);
+    this.sendWorkflowData(processedData); 
   }
+
   sendWorkflowData(workflowData: any): void {
     const formData = new FormData();
     formData.append('workflowData', JSON.stringify(workflowData, null, 2));
@@ -291,14 +287,7 @@ export class AppComponent implements OnInit {
       method: 'POST',
       body: formData
     })
-      .then(response => {response.json();
-        if(response.status === 200){
-          alert('Success');
-        }
-        if(response.status !== 200){
-          alert(`Error: ${response.statusText}`);
-        }
-      })
+      .then(response => response.json())
       .then(data => {
         console.log('Workflow data uploaded successfully:', data);
       })
@@ -365,8 +354,7 @@ export class AppComponent implements OnInit {
           nodeNamesSet.add(node.name);
   
           // Add to sidebar
-          this.items.push({ name: node.name, params: node.params, file: node.file });
-  
+          this.items.push({ name: node.name, params: JSON.stringify(node.params), file: node.file });
           // Add to Drawflow
         } else {
           console.warn(`Duplicate node name found: ${node.name}. Skipping this node.`);
@@ -389,7 +377,6 @@ export class AppComponent implements OnInit {
       console.error('Error importing workflow data:', error);
     }
   }
-
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -440,7 +427,7 @@ export class AppComponent implements OnInit {
       processedData.nodes.push({
         id: node.id,
         name: node.name,
-        params: item ? item.params : '',
+        params: item ? (typeof item.params === 'string' ? JSON.parse(item.params) : item.params) : {}, // Parse if params is a string
         file: item ? item.file : null,
         filePath: item && item.file ? item.file.path : null, // Include full file path
         connections: connections,
@@ -513,4 +500,4 @@ export class AppComponent implements OnInit {
     }
     return false;
   }
-} 
+}

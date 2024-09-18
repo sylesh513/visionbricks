@@ -3,28 +3,23 @@
   "tasks": [
     {
       "task_id": "1",
-      "task_name": "loading data",
+      "task_name": "newnode",
       "dependencies": [],
       "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
-      "base_parameters": "{\n\"param1\":\"new\"\n}"
+      "base_parameters": {
+        "asdf": "asdf"
+      }
     },
     {
       "task_id": "2",
-      "task_name": "preprocessing",
+      "task_name": "newnode 2",
       "dependencies": [
         "1"
       ],
       "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
-      "base_parameters": "{\n\"param 2\": \"second\"\n}"
-    },
-    {
-      "task_id": "3",
-      "task_name": "final_output",
-      "dependencies": [
-        "2"
-      ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
-      "base_parameters": ""
+      "base_parameters": {
+        "param1": "new"
+      }
     }
   ]
 }

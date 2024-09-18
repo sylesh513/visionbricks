@@ -17,7 +17,8 @@ export class NodeDialogComponent {
     private cdr: ChangeDetectorRef
   ) {
     if (data.file) {
-      this.initialFileName = data.file.name; // Initialize the initial file name
+      this.initialFileName = data.file.name || 'none'; // Initialize the initial file name
+      this.selectedFileName = data.file.name || 'none'; // Assign selectedFileName if file name is none or empty
     }
   }
 

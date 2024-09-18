@@ -93,20 +93,18 @@ def create_and_run_databricks_job(data):
             "task_key": task_key,
             "notebook_task": {
                 "notebook_path": notebook_path,  # Use the uploaded notebook
-                "base_parameters": {
-                    "param1": "guna",
-                    "param2": "new"}  # Can add parameters if needed
+                "base_parameters": task.get("base_parameters", {})  # Can add parameters if needed
             },
             "existing_cluster_id": CLUSTER_ID  # Use the existing cluster
         }
+        print("jobajba")
+        print(job_task)    
         
-        # If the task has dependencies, add them
         if task["dependencies"]:
             job_task["depends_on"] = [{"task_key": task_key_map.get(dep_task_id)} for dep_task_id in task["dependencies"] if task_key_map.get(dep_task_id)]
         
         job_payload["tasks"].append(job_task)
     
-    # Call the Databricks Jobs API to create the job
     response = requests.post(create_job_url, headers={"Authorization": f"Bearer {DATABRICKS_TOKEN}"}, json=job_payload)
     
     if response.status_code == 200:
@@ -230,7 +228,8 @@ def upload_workflow():
             "file": node.get('file', None),  # Include the file path if it exists
             "base_parameters": node.get('params', "")  # Include the params if they exist
         }
-        print("parameters")
+        print("thejson")
+        print(new_task)
         print(node.get('params', ""))
         new_workflow_data["tasks"].append(new_task)
 

@@ -2,39 +2,30 @@
   "nodes": [
     {
       "id": 1,
-      "name": "loading data",
-      "params": "{\n\"param1\":\"new\"\n}",
+      "name": "newnode",
+      "params": {
+        "asdf": "asdf"
+      },
       "file": {},
       "connections": [
-        "preprocessing"
+        "newnode 2"
       ],
       "position": {
-        "x": -72,
-        "y": 120
+        "x": -20,
+        "y": 110
       }
     },
     {
       "id": 2,
-      "name": "preprocessing",
-      "params": "{\n\"param 2\": \"second\"\n}",
-      "file": {},
-      "connections": [
-        "final_output"
-      ],
-      "position": {
-        "x": 194,
-        "y": 69
-      }
-    },
-    {
-      "id": 3,
-      "name": "final_output",
-      "params": "",
+      "name": "newnode 2",
+      "params": {
+        "param1": "new"
+      },
       "file": {},
       "connections": [],
       "position": {
-        "x": 431,
-        "y": 182
+        "x": 230,
+        "y": 66
       }
     }
   ]
