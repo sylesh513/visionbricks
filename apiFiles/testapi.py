@@ -93,7 +93,10 @@ def create_and_run_databricks_job(data):
             "task_key": task_key,
             "notebook_task": {
                 "notebook_path": notebook_path,  # Use the uploaded notebook
-                "base_parameters": task.get("base_parameters", {})  # Can add parameters if needed
+                "base_parameters": {
+                    "one": "1",
+                }
+                    # task.get("params", {})  # Can add parameters if needed
             },
             "existing_cluster_id": CLUSTER_ID  # Use the existing cluster
         }
@@ -226,7 +229,9 @@ def upload_workflow():
             "task_name": node['name'],
             "dependencies": dependencies[str(node['id'])],
             "file": node.get('file', None),  # Include the file path if it exists
-            "base_parameters": node.get('params', "")  # Include the params if they exist
+            "base_parameters": {
+                "one" : "1"
+                }  # Include the params if they exist
         }
         print("thejson")
         print(new_task)

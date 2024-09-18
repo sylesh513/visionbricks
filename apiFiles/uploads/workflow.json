@@ -2,30 +2,26 @@
   "nodes": [
     {
       "id": 1,
-      "name": "newnode",
-      "params": {
-        "asdf": "asdf"
-      },
+      "name": "n1",
+      "params": "{\n\"asdf\": \"asdf\"\n}",
       "file": {},
       "connections": [
-        "newnode 2"
+        "n2"
       ],
       "position": {
-        "x": -20,
-        "y": 110
+        "x": -75,
+        "y": 95
       }
     },
     {
       "id": 2,
-      "name": "newnode 2",
-      "params": {
-        "param1": "new"
-      },
+      "name": "n2",
+      "params": "",
       "file": {},
       "connections": [],
       "position": {
-        "x": 230,
-        "y": 66
+        "x": 197,
+        "y": 144
       }
     }
   ]

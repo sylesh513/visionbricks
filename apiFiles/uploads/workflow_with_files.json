@@ -3,22 +3,22 @@
   "tasks": [
     {
       "task_id": "1",
-      "task_name": "newnode",
+      "task_name": "n1",
       "dependencies": [],
       "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
       "base_parameters": {
-        "asdf": "asdf"
+        "one": "1"
       }
     },
     {
       "task_id": "2",
-      "task_name": "newnode 2",
+      "task_name": "n2",
       "dependencies": [
         "1"
       ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py",
       "base_parameters": {
-        "param1": "new"
+        "one": "1"
       }
     }
   ]

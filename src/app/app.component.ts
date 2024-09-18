@@ -427,7 +427,7 @@ export class AppComponent implements OnInit {
       processedData.nodes.push({
         id: node.id,
         name: node.name,
-        params: item ? (typeof item.params === 'string' ? JSON.parse(item.params) : item.params) : {}, // Parse if params is a string
+        params: item.params, // Parse if params is a string
         file: item ? item.file : null,
         filePath: item && item.file ? item.file.path : null, // Include full file path
         connections: connections,
