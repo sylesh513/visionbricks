@@ -3,7 +3,7 @@
   "tasks": [
     {
       "task_id": "1",
-      "task_name": "n1",
+      "task_name": "sadf",
       "dependencies": [],
       "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
       "base_parameters": {
@@ -12,11 +12,11 @@
     },
     {
       "task_id": "2",
-      "task_name": "n2",
+      "task_name": "nenwen",
       "dependencies": [
         "1"
       ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/newfile.py",
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
       "base_parameters": {
         "one": "1"
       }

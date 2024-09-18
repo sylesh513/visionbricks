@@ -177,7 +177,6 @@ def create_and_run_databricks_job(data):
             raise Exception(f"Error fetching job status: {status_response.text}")
         
         # Wait for 1 second before checking the status again
-        time.sleep(1)
 
 @app.route('/upload_workflow', methods=['POST'])
 def upload_workflow():

@@ -257,7 +257,10 @@ export class AppComponent implements OnInit {
   runWorkflow(): void {
     // Check if each node has a file
     for (const item of this.items) {
-      if (!item.file && item.file === 'none' && item.file === '') {
+      console.log("newnew");
+      console.log(item.file.name);
+
+      if (!item.file.name|| item.file.name === 'none' || item.file.name === ''|| item.file.name === undefined ) {
         alert(`Error: Node "${item.name}" does not have an associated file.`);
         return; // Stop the workflow from running
       }
@@ -353,9 +356,7 @@ export class AppComponent implements OnInit {
         if (!nodeNamesSet.has(node.name)) {
           nodeNamesSet.add(node.name);
   
-          // Add to sidebar
-          this.items.push({ name: node.name, params: JSON.stringify(node.params), file: node.file });
-          // Add to Drawflow
+          this.items.push({ name: node.name, params: JSON.stringify(node.params) ,file: node.file });
         } else {
           console.warn(`Duplicate node name found: ${node.name}. Skipping this node.`);
         }
@@ -391,14 +392,17 @@ export class AppComponent implements OnInit {
 
   clearWorkflow() {
     this.drawflow.clear();
-    window.location.reload();
+    this.items = [];
+    localStorage.removeItem('workflowData');
   }
 
   exportWorkflow() {
     const workflowData = this.drawflow.export();
     const processedData = this.processWorkflowData(workflowData);
     console.log('Exported Workflow Data:', processedData);
+    if(processedData !== undefined) {
     this.downloadWorkflow(processedData);
+    }
   }
 
   triggerFileInput() {
@@ -423,18 +427,24 @@ export class AppComponent implements OnInit {
           connections.push(connectedNode.name);
         }
       }
-  
-      processedData.nodes.push({
-        id: node.id,
-        name: node.name,
-        params: item.params, // Parse if params is a string
-        file: item ? item.file : null,
-        filePath: item && item.file ? item.file.path : null, // Include full file path
-        connections: connections,
-        position: { x: node.pos_x, y: node.pos_y } // Include positions
-      });
+      
+      try {
+        processedData.nodes.push({
+          id: node.id,
+          name: node.name,
+          params: item.params ? JSON.parse(item.params) : {}, // Parse if params is a string
+          file: item ? item.file : null,
+          filePath: item && item.file ? item.file.path : null, // Include full file path
+          connections: connections,
+          position: { x: node.pos_x, y: node.pos_y } // Include positions
+        });
+        return processedData;
+
+      } catch (error) {
+        alert('Error parsing JSON parameters: ' + error.message);
+        return;
+      }
     }
-    return processedData;
   }
 
   downloadWorkflow(workflowData: any) {
