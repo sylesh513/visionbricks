@@ -1,55 +1,55 @@
 {
-    "jobId": 756491228562757,
+    "jobId": 620240483153449,
     "jobName": "Data Analysis Pipeline",
     "status": "TERMINATED",
     "tasks": [
         {
             "name": "newnode",
-            "runId": 947827909376873,
+            "runId": 948110800485142,
             "status": "PENDING",
             "statusHistory": [
                 {
                     "status": "PENDING",
-                    "timestamp": "2024-09-19T08:43:35.883390+00:00"
+                    "timestamp": "2024-09-19T10:39:22.693440+00:00"
                 },
                 {
                     "status": "PENDING",
-                    "timestamp": "2024-09-19T08:43:40.098907+00:00"
+                    "timestamp": "2024-09-19T10:39:27.458151+00:00"
                 },
                 {
                     "status": "RUNNING",
-                    "timestamp": "2024-09-19T08:43:42.082858+00:00"
+                    "timestamp": "2024-09-19T10:39:29.435178+00:00"
                 },
                 {
                     "status": "TERMINATED",
-                    "timestamp": "2024-09-19T08:43:49.983478+00:00"
+                    "timestamp": "2024-09-19T10:39:39.346926+00:00"
                 }
             ]
         },
         {
             "name": "newnewnode",
-            "runId": 465726623715470,
+            "runId": 768107740359467,
             "status": "PENDING",
             "statusHistory": [
                 {
                     "status": "PENDING",
-                    "timestamp": "2024-09-19T08:43:36.903336+00:00"
+                    "timestamp": "2024-09-19T10:39:23.703350+00:00"
                 },
                 {
                     "status": "BLOCKED",
-                    "timestamp": "2024-09-19T08:43:40.099109+00:00"
+                    "timestamp": "2024-09-19T10:39:27.458275+00:00"
                 },
                 {
                     "status": "PENDING",
-                    "timestamp": "2024-09-19T08:43:49.983626+00:00"
+                    "timestamp": "2024-09-19T10:39:39.347111+00:00"
                 },
                 {
                     "status": "RUNNING",
-                    "timestamp": "2024-09-19T08:43:51.901203+00:00"
+                    "timestamp": "2024-09-19T10:39:41.372078+00:00"
                 },
                 {
                     "status": "TERMINATED",
-                    "timestamp": "2024-09-19T08:43:59.931041+00:00"
+                    "timestamp": "2024-09-19T10:39:49.184468+00:00"
                 }
             ]
         }

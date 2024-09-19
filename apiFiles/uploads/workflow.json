@@ -2,26 +2,67 @@
   "nodes": [
     {
       "id": 1,
-      "name": "newnode",
+      "name": "Source",
       "params": {},
       "file": {},
       "connections": [
-        "newnewnode"
+        "Dataset"
       ],
       "position": {
-        "x": -109,
-        "y": 117
+        "x": -168,
+        "y": 43
       }
     },
     {
       "id": 2,
-      "name": "newnewnode",
+      "name": "Dataset",
       "params": {},
+      "file": {},
+      "connections": [
+        "Pre-Processing"
+      ],
+      "position": {
+        "x": 92,
+        "y": 124.42857142857143
+      }
+    },
+    {
+      "id": 3,
+      "name": "Pre-Processing",
+      "params": {},
+      "file": {},
+      "connections": [
+        "Target"
+      ],
+      "position": {
+        "x": 337,
+        "y": 208
+      }
+    },
+    {
+      "id": 4,
+      "name": "Target",
+      "params": {},
+      "file": {},
+      "connections": [
+        "guna"
+      ],
+      "position": {
+        "x": 560,
+        "y": 273
+      }
+    },
+    {
+      "id": 5,
+      "name": "guna",
+      "params": {
+        "name": "guna"
+      },
       "file": {},
       "connections": [],
       "position": {
-        "x": 132,
-        "y": 187
+        "x": 758,
+        "y": 353
       }
     }
   ]

@@ -1,0 +1,51 @@
+{
+    "jobId": 396113013064638,
+    "jobName": "Data Analysis Pipeline",
+    "status": "TERMINATED",
+    "tasks": [
+        {
+            "name": "Source",
+            "runId": null,
+            "status": "PENDING",
+            "statusHistory": [
+                {
+                    "status": "PENDING",
+                    "timestamp": "2024-09-19T14:49:30.295712+00:00"
+                }
+            ]
+        },
+        {
+            "name": "Dataset",
+            "runId": null,
+            "status": "PENDING",
+            "statusHistory": [
+                {
+                    "status": "PENDING",
+                    "timestamp": "2024-09-19T14:49:31.659343+00:00"
+                }
+            ]
+        },
+        {
+            "name": "Pre-Processing",
+            "runId": null,
+            "status": "PENDING",
+            "statusHistory": [
+                {
+                    "status": "PENDING",
+                    "timestamp": "2024-09-19T14:49:33.152530+00:00"
+                }
+            ]
+        },
+        {
+            "name": "Target",
+            "runId": null,
+            "status": "PENDING",
+            "statusHistory": [
+                {
+                    "status": "PENDING",
+                    "timestamp": "2024-09-19T14:49:34.573151+00:00"
+                }
+            ]
+        }
+    ]
+}

@@ -4,6 +4,8 @@ import { NodeDialogComponent } from './node-dialog/node-dialog.component';
 import Drawflow from 'drawflow';
 import interact from 'interactjs';
 import { io } from 'socket.io-client';
+import { SocketService } from './socket.service';
+
 const socket = io('http://127.0.0.1:5000'); // Replace with your socket server URL
 
 @Component({
@@ -17,13 +19,52 @@ export class AppComponent implements OnInit {
   id: any = null;
   items = [{ name: 'Node 1', params: '', file: null }];
   newItemName = '';
+  taskUpdates: any[] = [];
+  jobStatus: string = '';
+  showDownloadButton: boolean = false; // Add this property
 
-  constructor(public dialog: MatDialog) {}
+
+  constructor(public dialog: MatDialog, private socketService: SocketService) {}
 
   ngOnInit() {
     this.id = document.getElementById('drawflow');
     this.drawflow = new Drawflow(this.id);
     this.drawflow.start();
+    this.socketService.getTaskUpdates().subscribe((taskUpdate) => {
+      this.taskUpdates.push(taskUpdate);
+      // console.log('Task Update:', taskUpdate['task_name']);
+      // console.log('Task Updates:', taskUpdate['status']);
+      // this.updateNodeColor(taskUpdate['task_name'], taskUpdate['status']);
+      this.handleWebhookUpdate(taskUpdate['task_name'], taskUpdate['status']);
+      this.appendWebSocketOutput(taskUpdate);
+
+
+    });
+
+
+    // Subscribe to job completion event
+    this.socketService.getJobCompletion().subscribe((jobCompletion) => {
+      this.jobStatus = jobCompletion.status;
+      console.log('Job Completed:', jobCompletion);
+      const outputElement = document.getElementById('websocket-output');
+      if (outputElement) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = "The workflow ran successfully ✔️";
+        outputElement.appendChild(messageElement);
+        outputElement.scrollTop = outputElement.scrollHeight;
+      }
+      // Show the download button
+      const downloadButton = document.getElementById('download-button');
+      if (downloadButton) {
+        downloadButton.hidden = false;
+        downloadButton.style.display = 'flex';
+      }
+    });
+
+    // Handle case where execution is already in progress
+    this.socketService.getExecutionInProgress().subscribe((message) => {
+      alert(message);
+    });
 
     // Load workflow data from localStorage
     const savedWorkflow = localStorage.getItem('workflowData');
@@ -114,7 +155,49 @@ export class AppComponent implements OnInit {
     const processedData = this.processWorkflowData(workflowData);
     localStorage.setItem('workflowData', JSON.stringify(processedData));
   }
-
+  updateNodeColor(taskName: string, status: string) {
+    // Iterate through all nodes to find the one with the matching name
+    const nodes = this.drawflow.drawflow.drawflow[1].data; // Assuming you're working in the first module
+    for (const nodeId in nodes) {
+      if (nodes[nodeId].name === taskName) {
+        const nodeElement = document.querySelector(`#node-${nodeId}`);
+        if (nodeElement) {
+          let colorClass = '';
+          if (status === 'completed') {
+            colorClass = 'node-color-green';
+          } else if (status === 'in-progress') {
+            colorClass = 'node-color-blue';
+          } else if (status === 'failed') {
+            colorClass = 'node-color-red';
+          }
+  
+          // Remove existing color classes
+          nodeElement.classList.remove('node-color-red', 'node-color-green', 'node-color-blue');
+          // Add new color class
+          nodeElement.classList.add(colorClass);
+        }
+        break;
+      }
+    }
+  }
+  downloadFile() {
+    const url = 'http://127.0.0.1:5000/download'; // Replace with your API endpoint
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'output'; // Replace with the desired file name
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => {
+        console.error('Error downloading file:', error);
+      });
+  }
   openDialog(): void {
     const dialogRef = this.dialog.open(NodeDialogComponent, {
       width: '300px',
@@ -229,6 +312,69 @@ export class AppComponent implements OnInit {
       }
     });
   }
+  // Assuming you have a webhook event that passes the node name and status
+handleWebhookUpdate(newnodeName: string, newstatus: string ) {
+  console.log(newnodeName);
+  console.log(newstatus);
+  // Find the node by name (or use node ID if you prefer)
+  const nodeId = this.findNodeIdByName(newnodeName);
+  
+  if (nodeId) {
+    // Change node color based on status
+    this.changeNodeColor(nodeId, newstatus);
+  }
+}
+appendWebSocketOutput(taskUpdate: any) {
+  const outputElement = document.getElementById('websocket-output');
+  if (outputElement) {
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `Task: ${taskUpdate['task_name']}, Status: ${taskUpdate['status']}`;
+    outputElement.appendChild(messageElement);
+    outputElement.scrollTop = outputElement.scrollHeight;
+  }
+}
+
+// Helper method to find node ID by its name
+findNodeIdByName(nodeName: string) {
+  const nodes = this.drawflow.getNodesFromName(nodeName); 
+  console.log(nodes);// You can also get node by ID
+  return nodes.length > 0 ? nodes[0].id : null;
+}
+
+// Helper method to change node color based on status
+changeNodeColor(nodeId: number, status: string) {
+  // Get the DOM element for the node
+  const nodeElement = document.querySelector(`#node-${nodeId}`);
+  console.log(nodeElement);
+
+  if (nodeElement) {
+    // Apply different colors based on status
+    let color = '';
+    switch (status) {
+      case 'PENDING':
+        color = '#f1c40f';  // Yellow for pending
+        break;
+      case 'RUNNING':
+        color = '#3498db';  // Blue for running
+        break;
+      case 'COMPLETED':
+        color = '#2ecc71';  // Green for completed
+        break;
+      case 'FAILED':
+        color = '#e74c3c';  // Red for failed
+        break;
+      default:
+        color = '#cccccc';  // Default gray
+        break;
+    }
+
+    // Apply the new background color to the node element
+    (nodeElement as HTMLElement).style.background = '#3498db';
+    (nodeElement as HTMLElement).style.color = '#3498db';
+
+  }
+}
+
 
   uploadFile(file: File, index: number): void {
     // Implement the file upload logic here
@@ -257,6 +403,14 @@ export class AppComponent implements OnInit {
   }
 
   runWorkflow(): void {
+    const outputElement = document.getElementById('websocket-output');
+  if (outputElement) {
+    const messageElement = document.createElement('div');
+    messageElement.textContent = "Please Wait ....";
+    outputElement.appendChild(messageElement);
+    outputElement.scrollTop = outputElement.scrollHeight;
+  }
+
     // Check if each node has a file
     for (const item of this.items) {
       console.log("newnew");
@@ -296,12 +450,10 @@ export class AppComponent implements OnInit {
       .then(response => response.json())
       .then(data => {
         console.log('Workflow data uploaded successfully:', data);
-        socket.emit('run_workflow');
+        this.socketService.runWorkflow();
 
-      // Listen for real-time updates from the server
-      socket.on('workflow_output', (output) => {
-        console.log('Real-time output:', output);
-      });
+        // Listen for real-time updates from the server
+   
  
       })
       .catch(error => {

@@ -3,22 +3,47 @@
   "tasks": [
     {
       "task_id": "1",
-      "task_name": "newnode",
+      "task_name": "Source",
       "dependencies": [],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
-      "base_parameters": {
-        "one": "1"
-      }
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Dataset.py",
+      "base_parameters": {}
     },
     {
       "task_id": "2",
-      "task_name": "newnewnode",
+      "task_name": "Dataset",
       "dependencies": [
         "1"
       ],
-      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Dataset.py",
+      "base_parameters": {}
+    },
+    {
+      "task_id": "3",
+      "task_name": "Pre-Processing",
+      "dependencies": [
+        "2"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Dataset.py",
+      "base_parameters": {}
+    },
+    {
+      "task_id": "4",
+      "task_name": "Target",
+      "dependencies": [
+        "3"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Dataset.py",
+      "base_parameters": {}
+    },
+    {
+      "task_id": "5",
+      "task_name": "guna",
+      "dependencies": [
+        "4"
+      ],
+      "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Dataset.py",
       "base_parameters": {
-        "one": "1"
+        "name": "guna"
       }
     }
   ]

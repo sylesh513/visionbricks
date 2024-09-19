@@ -11,6 +11,7 @@ from flask_socketio import SocketIO, emit
 from datetime import datetime, timezone
 from flask_cors import CORS
 
+JSON_FILE_PATH = '/home/vesh/angular-drawflow-ttbyqn/apiFiles/job_final_status.json'
 
 # Initialize Flask and Flask-SocketIO
 app = Flask(__name__)
@@ -44,11 +45,11 @@ def get_task_key(task_name):
 # Helper function to upload Python file as a notebook in Databricks
 def upload_python_file_as_notebook(file_path, notebook_path):
     upload_url = f"{DATABRICKS_HOST}/api/2.0/workspace/import"
-    
+
     # Read the Python file
     with open(file_path, 'r') as f:
         python_code = f.read()
-    
+
     # Encode the Python code in base64
     encoded_python_code = base64.b64encode(python_code.encode('utf-8')).decode('utf-8')
     
@@ -116,10 +117,13 @@ def create_and_run_databricks_job():
             "task_key": task_key,
             "notebook_task": {
                 "notebook_path": notebook_path,
-                "base_parameters": task.get("parameters", {})
+                "base_parameters": task.get("base_parameters", {})
             },
             "existing_cluster_id": CLUSTER_ID
         }
+        print("task")
+        print(task)
+        print(task.get("base_parameters", {}))
         if task["dependencies"]:
             job_task["depends_on"] = [{"task_key": task_key_map.get(dep_task_id)} for dep_task_id in task["dependencies"] if task_key_map.get(dep_task_id)]
         
@@ -197,7 +201,7 @@ def create_and_run_databricks_job():
         
         time.sleep(1)
 
-    output_file = 'job_final_status.json'
+    output_file = '/home/vesh/angular-drawflow-ttbyqn/apiFiles/job_final_status.json'
     with open(output_file, 'w') as f:
         json.dump(job_status, f, indent=4)
     
@@ -223,8 +227,8 @@ def upload_workflow():
 
     workflow_data = json.loads(request.form['workflowData'])
     files = request.files
-    print(files)
-    print(workflow_data)
+    # print(files)
+    # print(workflow_data)
 
     # Clear the upload folder
     clear_upload_folder(UPLOAD_FOLDER)
@@ -266,13 +270,8 @@ def upload_workflow():
             "task_name": node['name'],
             "dependencies": dependencies[str(node['id'])],
             "file": node.get('file', None),  # Include the file path if it exists
-            "base_parameters": {
-                "one" : "1"
-                }  # Include the params if they exist
+            "base_parameters": node.get('params', {}) # Include the params if they exist
         }
-        print("thejson")
-        print(new_task)
-        print(node.get('params', ""))
         new_workflow_data["tasks"].append(new_task)
 
     # Save the transformed workflow data
@@ -285,13 +284,17 @@ def upload_workflow():
 
 # Route for downloading a file
 @app.route('/download', methods=['GET'])
-def download_file():
-    filepath = 'path/to/your/static/file.txt'  # Replace with the path to the file you want to download
+def download_json():
     try:
-        return send_file(filepath, as_attachment=True)
-    except Exception as e:
-        return str(e), 404
+        file_path = os.path.join(JSON_FILE_PATH)
+        
+        # Ensure the file exists before attempting to send it
+        if not os.path.exists(file_path):
+            return jsonify({'error': 'File not found'}), 404
 
-# Entry point for the app with SocketIO
+        return send_file(file_path, as_attachment=True, mimetype='application/json')
+    
+    except Exception as e:
+        return str(e), 500# Entry point for the app with SocketIO
 if __name__ == '__main__':
     socketio.run(app, debug=True, use_reloader=False)

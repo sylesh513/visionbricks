@@ -6,31 +6,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { MatDialogModule } from '@angular/material/dialog'; // Import MatDialogModule
 import { MatButtonModule } from '@angular/material/button'; // Import MatButtonModule
 import { MatInputModule } from '@angular/material/input'; // Import MatInputModule
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NodeDialogComponent } from './node-dialog/node-dialog.component'; // Import NodeDialogComponent
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { SocketService } from './socket.service';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NodeDialogComponent, // Add NodeDialogComponent to declarations
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    DragDropModule, // Include DragDropModule in imports array
-    BrowserAnimationsModule, // Include BrowserAnimationsModule in imports array
-    MatDialogModule, // Include MatDialogModule in imports array
-    MatButtonModule, // Include MatButtonModule in imports array
-    MatInputModule,
-    HttpClientModule,
-    SocketIoModule.forRoot(config),
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: { transports: ['websocket'] } };
 
-     // Include MatInputModule in imports array
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        NodeDialogComponent, // Add NodeDialogComponent to declarations
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        DragDropModule, // Include DragDropModule in imports array
+        BrowserAnimationsModule, // Include BrowserAnimationsModule in imports array
+        MatDialogModule, // Include MatDialogModule in imports array
+        MatButtonModule, // Include MatButtonModule in imports array
+        MatInputModule,
+        SocketIoModule.forRoot(config)],
+         providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
