@@ -2,26 +2,26 @@
   "nodes": [
     {
       "id": 1,
-      "name": "sadf",
-      "params": "{\n\"param\": \"new\"\n}",
+      "name": "newnode",
+      "params": {},
       "file": {},
       "connections": [
-        "nenwen"
+        "newnewnode"
       ],
       "position": {
-        "x": -58,
-        "y": 65
+        "x": -109,
+        "y": 117
       }
     },
     {
       "id": 2,
-      "name": "nenwen",
-      "params": "lfklaf",
+      "name": "newnewnode",
+      "params": {},
       "file": {},
       "connections": [],
       "position": {
-        "x": 219,
-        "y": 109
+        "x": 132,
+        "y": 187
       }
     }
   ]

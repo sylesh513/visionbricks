@@ -3,7 +3,7 @@
   "tasks": [
     {
       "task_id": "1",
-      "task_name": "sadf",
+      "task_name": "newnode",
       "dependencies": [],
       "file": "/home/vesh/angular-drawflow-ttbyqn/apiFiles/uploads/Untitled-1.py",
       "base_parameters": {
@@ -12,7 +12,7 @@
     },
     {
       "task_id": "2",
-      "task_name": "nenwen",
+      "task_name": "newnewnode",
       "dependencies": [
         "1"
       ],

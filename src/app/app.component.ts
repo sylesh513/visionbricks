@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { NodeDialogComponent } from './node-dialog/node-dialog.component';
 import Drawflow from 'drawflow';
 import interact from 'interactjs';
+import { io } from 'socket.io-client';
+const socket = io('http://127.0.0.1:5000'); // Replace with your socket server URL
 
 @Component({
   selector: 'my-app',
@@ -258,11 +260,12 @@ export class AppComponent implements OnInit {
     // Check if each node has a file
     for (const item of this.items) {
       console.log("newnew");
-      console.log(item.file.name);
-
-      if (!item.file.name|| item.file.name === 'none' || item.file.name === ''|| item.file.name === undefined ) {
+  
+      if (!item.file || !item.file.name || item.file.name === 'none' || item.file.name === '' || item.file.name === undefined) {
         alert(`Error: Node "${item.name}" does not have an associated file.`);
         return; // Stop the workflow from running
+      } else {
+        console.log(item.file.name);
       }
     }
   
@@ -293,6 +296,13 @@ export class AppComponent implements OnInit {
       .then(response => response.json())
       .then(data => {
         console.log('Workflow data uploaded successfully:', data);
+        socket.emit('run_workflow');
+
+      // Listen for real-time updates from the server
+      socket.on('workflow_output', (output) => {
+        console.log('Real-time output:', output);
+      });
+ 
       })
       .catch(error => {
         console.error('Error uploading workflow data:', error);
@@ -378,6 +388,7 @@ export class AppComponent implements OnInit {
       console.error('Error importing workflow data:', error);
     }
   }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -411,7 +422,6 @@ export class AppComponent implements OnInit {
       fileInput.click();
     }
   }
-
   processWorkflowData(workflowData: any): any {
     const processedData = { nodes: [] };
     for (const key in workflowData.drawflow.Home.data) {
@@ -427,7 +437,7 @@ export class AppComponent implements OnInit {
           connections.push(connectedNode.name);
         }
       }
-      
+  
       try {
         processedData.nodes.push({
           id: node.id,
@@ -438,15 +448,13 @@ export class AppComponent implements OnInit {
           connections: connections,
           position: { x: node.pos_x, y: node.pos_y } // Include positions
         });
-        return processedData;
-
       } catch (error) {
         alert('Error parsing JSON parameters: ' + error.message);
         return;
       }
     }
+    return processedData;
   }
-
   downloadWorkflow(workflowData: any) {
     const dataStr = JSON.stringify(workflowData, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
